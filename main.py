@@ -1,4 +1,4 @@
-# 1. data cleaning
+# TODO 1. --------data cleaning--------------
 import numpy as np
 import pandas as pd
 df = pd.read_csv("healthcare-dataset-stroke-data.csv")
@@ -30,10 +30,10 @@ for index in range(0, len(df["age"])):
 print(df)
 
 
-# 2. feature selection
+# TODO 2. --------feature selection------------
 
-# 3. split data and run model
+# TODO 3. --------split data and run model-----
 
-# 4. tune hyperparameters
+# TODO 4. --------tune hyperparameters---------
 
-# 5. detect and then prevent overfitting
+# TODO 5. --detect and then prevent overfitting-
