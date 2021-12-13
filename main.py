@@ -57,7 +57,9 @@ model = LogisticRegression(
 parameters = {"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
 grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=[5, 10, 20])
 grid_search.fit(X_train, Y_train)
-
 print(grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_)
+
+prepro = logreg.predict_proba(X_test)
+acc = logreg.score(X_test,Y_test)
 
 # TODO 5. --detect and then prevent overfitting-
