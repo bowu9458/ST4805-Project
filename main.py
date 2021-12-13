@@ -1,3 +1,6 @@
+from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
+from sklearn.model_selection import train_test_split, GridSearchCV
+
 # TODO 1. --------data cleaning--------------
 import numpy as np
 import pandas as pd
@@ -32,8 +35,21 @@ print(df)
 
 # TODO 2. --------feature selection------------
 
-# TODO 3. --------split data and run model-----
 
+# TODO 3. --------split data and run model-----
+df_data = df.drop(df.columns[-1], axis=1)
+df_label = df[df.columns[-1]]
+X_train, X_test, Y_train, Y_test = train_test_split(df_data, df_label, test_size=0.2, random_state=0)
+
+model = LogisticRegression(
+    penalty="l2", random_state=None, solver="liblinear", max_iter=1000,
+    multi_class='ovr', verbose=0,
+)
 # TODO 4. --------tune hyperparameters---------
+parameters = {"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
+grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=[5, 10, 20])
+grid_search.fit(X_train, Y_train)
+
+print(grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_)
 
 # TODO 5. --detect and then prevent overfitting-
