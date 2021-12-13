@@ -43,6 +43,7 @@ divide = np.random.rand(len(data)) < 0.8
 train_data = data[divide]
 test_data = data[~divide]
 features = train_data.shape[1] - 1
+# 我在下面split了, 这里可以不split了
 
 # TODO 3. --------split data and run model-----
 df_data = df.drop(df.columns[-1], axis=1)
