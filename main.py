@@ -1,5 +1,9 @@
 from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
 from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn import datasets
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import learning_curve
+import matplotlib.pyplot as plt # 可视化模块
 
 # TODO 1. --------data cleaning--------------
 import numpy as np
@@ -64,3 +68,15 @@ prepro = logreg.predict_proba(X_test)
 acc = logreg.score(X_test,Y_test)
 
 # TODO 5. --detect and then prevent overfitting-
+(X,y) = datasets.load_digits(return_X_y=True)
+# print(X[:2,:])
+
+train_sizes,train_score,test_score = learning_curve(RandomForestClassifier(),X,y,train_sizes=[0.1, 0.25, 0.5, 0.75, 1],cv=10,scoring='accuracy')
+train_error =  1- np.mean(train_score,axis=1)
+test_error = 1- np.mean(test_score,axis=1)
+plt.plot(train_sizes,train_error,'o-',color = 'r',label = 'training')
+plt.plot(train_sizes,test_error,'o-',color = 'g',label = 'testing')
+plt.legend(loc='best')
+plt.xlabel('traing examples')
+plt.ylabel('error')
+plt.show()
