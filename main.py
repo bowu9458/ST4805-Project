@@ -63,10 +63,12 @@ for index in range(0, len(df["Residence_type"])):
 for index in range(0, len(df["smoking_status"])):
     if df["smoking_status"][index] == "formerly smoked":
         df["smoking_status"][index] = 1
-    elif df["smoking_status"][index] == "never smoked":
+    elif df["smoking_status"][index] == "smokes":
         df["smoking_status"][index] = 2
-    else:
+    elif df["smoking_status"][index] == "never smoked":
         df["smoking_status"][index] = 3
+    else:
+        df["smoking_status"][index] = 4
 
 # Switching the integer datatype of the column stroke into string
 for index in range(0, len(df["stroke"])):
