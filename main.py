@@ -4,8 +4,6 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 # TODO 1. --------data cleaning--------------
 import numpy as np
 import pandas as pd
-from matplotlib.pyplot import clf
-from sklearn import datasets, svm
 from sklearn.model_selection import cross_validate, train_test_split, cross_val_score
 
 df = pd.read_csv("healthcare-dataset-stroke-data.csv")
@@ -38,12 +36,11 @@ print(df)
 
 
 # TODO 2. --------feature selection------------
-data = pd.read_csv("preprocessed_data.csv")
-divide = np.random.rand(len(data)) < 0.8
-train_data = data[divide]
-test_data = data[~divide]
+df = pd.read_csv("preprocessed_data.csv")
+divide = np.random.rand(len(df)) < 0.8
+train_data = df[divide]
+test_data = df[~divide]
 features = train_data.shape[1] - 1
-# 我在下面split了, 这里可以不split了
 
 # TODO 3. --------split data and run model-----
 df_data = df.drop(df.columns[-1], axis=1)
@@ -60,7 +57,7 @@ grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=
 grid_search.fit(X_train, Y_train)
 print(grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_)
 
-prepro = logreg.predict_proba(X_test)
-acc = logreg.score(X_test,Y_test)
+prepro = model.predict_proba(X_test)
+acc = model.score(X_test, Y_test)
 
 # TODO 5. --detect and then prevent overfitting-
