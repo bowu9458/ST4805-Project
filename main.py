@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import learning_curve
-import matplotlib.pyplot as plt # 可视化模块
+import matplotlib.pyplot as plt  # 可视化模块
 
 # TODO 1. --------data cleaning--------------
 import numpy as np
@@ -29,7 +29,46 @@ for index in range(0, len(df["bmi"])):
 for index in range(0, len(df["age"])):
     df["age"] = df["age"].astype(int)
 
-# Switching the integer datatype of the column age into string
+# Switching the string datatype of the column gender into integer
+for index in range(0, len(df["gender"])):
+    if df["gender"][index] == "Male":
+        df["gender"][index] = 1
+    else:
+        df["gender"][index] = 2
+
+# Switching the string datatype of the column married into integer
+for index in range(0, len(df["ever_married"])):
+    if df["ever_married"][index] == "Yes":
+        df["ever_married"][index] = 1
+    else:
+        df["ever_married"][index] = 0
+
+# Switching the string datatype of the column married into integer
+for index in range(0, len(df["work_type"])):
+    if df["work_type"][index] == "Private":
+        df["work_type"][index] = 1
+    elif df["work_type"][index] == "Self-employed":
+        df["work_type"][index] = 2
+    else:
+        df["work_type"][index] = 3
+
+# Switching the string datatype of the column living into integer
+for index in range(0, len(df["Residence_type"])):
+    if df["Residence_type"][index] == "Urban":
+        df["Residence_type"][index] = 1
+    else:
+        df["Residence_type"][index] = 2
+
+# Switching the string datatype of the column smoking status into integer
+for index in range(0, len(df["smoking_status"])):
+    if df["smoking_status"][index] == "formerly smoked":
+        df["smoking_status"][index] = 1
+    elif df["smoking_status"][index] == "never smoked":
+        df["smoking_status"][index] = 2
+    else:
+        df["smoking_status"][index] = 3
+
+# Switching the integer datatype of the column stroke into string
 for index in range(0, len(df["stroke"])):
     if df["stroke"][index] == 1:
         df["stroke"][index] = "Yes"
@@ -40,12 +79,11 @@ for index in range(0, len(df["stroke"])):
 df.to_csv("preprocessed_data.csv")
 print(df)
 
-
 # TODO 2. --------feature selection------------
-data = pd.read_csv("preprocessed_data.csv")
-divide = np.random.rand(len(data)) < 0.8
-train_data = data[divide]
-test_data = data[~divide]
+df = pd.read_csv("preprocessed_data.csv")
+divide = np.random.rand(len(df)) < 0.8
+train_data = df[divide]
+test_data = df[~divide]
 features = train_data.shape[1] - 1
 # 我在下面split了, 这里可以不split了
 
@@ -65,19 +103,20 @@ grid_search.fit(X_train, Y_train)
 print(grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_)
 
 prepro = grid_search.predict_proba(X_test)
-acc = grid_search.score(X_test,Y_test)
+acc = grid_search.score(X_test, Y_test)
 
 # TODO 5. --detect and then prevent overfitting-
 # 等1，2，3，4搞完，看模型的train的正确率和test的正确率，再决定是否有overfitting
-(X,y) = datasets.load_digits(return_X_y=True)
+(X, y) = datasets.load_digits(return_X_y=True)
 # print(X[:2,:])
 
-train_sizes,train_score,test_score = learning_curve(RandomForestClassifier(),X,y,train_sizes=[0.1, 0.25, 0.5, 0.75, 1],cv=10,scoring='accuracy')
-train_error =  1- np.mean(train_score,axis=1)
-test_error = 1- np.mean(test_score,axis=1)
-plt.plot(train_sizes,train_error,'o-',color = 'r',label = 'training')
-plt.plot(train_sizes,test_error,'o-',color = 'g',label = 'testing')
+train_sizes, train_score, test_score = learning_curve(RandomForestClassifier(), X, y,
+                                                      train_sizes=[0.1, 0.25, 0.5, 0.75, 1], cv=10, scoring='accuracy')
+train_error = 1 - np.mean(train_score, axis=1)
+test_error = 1 - np.mean(test_score, axis=1)
+plt.plot(train_sizes, train_error, 'o-', color='r', label='training')
+plt.plot(train_sizes, test_error, 'o-', color='g', label='testing')
 plt.legend(loc='best')
-plt.xlabel('traing examples')
+plt.xlabel('training examples')
 plt.ylabel('error')
 plt.show()
