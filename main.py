@@ -64,10 +64,11 @@ grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=
 grid_search.fit(X_train, Y_train)
 print(grid_search.grid_scores_, grid_search.best_params_, grid_search.best_score_)
 
-prepro = logreg.predict_proba(X_test)
-acc = logreg.score(X_test,Y_test)
+prepro = grid_search.predict_proba(X_test)
+acc = grid_search.score(X_test,Y_test)
 
 # TODO 5. --detect and then prevent overfitting-
+# 等1，2，3，4搞完，看模型的train的正确率和test的正确率，再决定是否有overfitting
 (X,y) = datasets.load_digits(return_X_y=True)
 # print(X[:2,:])
 
