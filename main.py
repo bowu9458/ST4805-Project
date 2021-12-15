@@ -76,6 +76,7 @@ for index in range(0, len(df["stroke"])):
         df["stroke"][index] = "Yes"
     else:
         df["stroke"][index] = "No"
+df = df.drop(['id'], axis=1)
 
 # Knitting the dataframe into a csv format file
 df.to_csv("preprocessed_data.csv")
