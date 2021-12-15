@@ -1,6 +1,7 @@
 from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn import datasets
+from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt  # 可视化模块
@@ -13,6 +14,7 @@ from sklearn import datasets, svm
 from sklearn.model_selection import cross_validate, train_test_split, cross_val_score
 
 df = pd.read_csv("healthcare-dataset-stroke-data.csv")
+df = df.drop(["id"], axis=1)
 # Determining that if missing patterns exist
 df.apply(lambda x: sum(x.isnull()), axis=0)
 bmi_mean = np.mean(df["bmi"])
@@ -70,25 +72,24 @@ for index in range(0, len(df["smoking_status"])):
     else:
         df["smoking_status"][index] = 4
 
-# Switching the integer datatype of the column stroke into string
-for index in range(0, len(df["stroke"])):
-    if df["stroke"][index] == 1:
-        df["stroke"][index] = "Yes"
-    else:
-        df["stroke"][index] = "No"
-df = df.drop(['id'], axis=1)
-
 # Knitting the dataframe into a csv format file
 df.to_csv("preprocessed_data.csv")
-print(df)
+# print(df)
 
 # TODO 2. --------feature selection------------
-df = pd.read_csv("preprocessed_data.csv")
-divide = np.random.rand(len(df)) < 0.8
-train_data = df[divide]
-test_data = df[~divide]
-features = train_data.shape[1] - 1
-# 我在下面split了, 这里可以不split了
+df = pd.read_csv("preprocessed_data.csv", index_col=0)
+X = df.iloc[:, 0:12]
+y = df.iloc[:, -1]
+feature_model = ExtraTreesClassifier()
+feature_model.fit(X, y)
+# print(model.feature_importances_)
+feature_score = pd.Series(feature_model.feature_importances_, index=X.columns)
+feature_score.nlargest(15).plot(kind='bar')
+plt.show()
+df = df.drop(["gender"], axis=1)
+df = df.drop(["Residence_type"], axis=1)
+df = df.drop(["work_type"], axis=1)
+print(df)
 
 # TODO 3. --------split data and run model-----
 df_data = df.drop(df.columns[-1], axis=1)
