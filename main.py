@@ -112,10 +112,12 @@ def run_model(df_data, df_label):
 
     parameters = [{"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
                    "penalty": ["l2", "l1"],
-                   "solver": ["liblinear"]},
-                  {"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
-                   "penalty": ["none"],
-                   "solver": ["lbfgs"]}]
+                   "solver": ["liblinear"]
+                   },
+                  {"penalty": ["none"],
+                   "solver": ["lbfgs"]
+                   }
+                  ]
     grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=10)
     grid_search.fit(X_train, Y_train)
     print(grid_search.best_params_, grid_search.best_score_)
@@ -125,7 +127,7 @@ def run_model(df_data, df_label):
 
 # TODO 5. --detect and then prevent overfitting-
 def draw_learning_curve(df_data, df_label):
-    """_best_params : {'C': 10, 'penalty': 'l1', 'solver': 'liblinear'}"""
+    """_best_params : {'C': 10, 'penalty': 'l1' or 'l2', 'solver': 'liblinear'}"""
     logistic_regre = LogisticRegression(
         penalty='l1',
         C=10,
@@ -149,8 +151,8 @@ def draw_learning_curve(df_data, df_label):
     plt.ylabel('score')
     plt.show()
     # error rate
-    train_error = 1 - np.mean(train_score, axis=1)
-    test_error = 1 - np.mean(test_score, axis=1)
+    train_error = 1 - train_score
+    test_error = 1 - test_score
     plt.plot(train_sizes, train_error, 'o-', color='r', label='training')
     plt.plot(train_sizes, test_error, 'o-', color='g', label='testing')
     plt.legend(loc='best')
