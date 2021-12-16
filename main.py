@@ -1,9 +1,12 @@
 from sklearn.linear_model import LogisticRegressionCV, LogisticRegression
 from sklearn.model_selection import train_test_split, GridSearchCV
+from sklearn import datasets
 from sklearn.ensemble import ExtraTreesClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import learning_curve
 import matplotlib.pyplot as plt  # 可视化模块
+
+# TODO 1. --------data cleaning--------------
 import numpy as np
 import pandas as pd
 from matplotlib.pyplot import clf
@@ -28,7 +31,10 @@ def data_cleaning():
             df["bmi"][index] = format(df["bmi"][index], '.1f')
 
     # Switching the float datatype of the column age into integer
+    age_mean = np.mean(df["age"])
     for index in range(0, len(df["age"])):
+        if df["age"][index] == 0:
+            df["age"][index] = age_mean
         df["age"] = df["age"].astype(int)
 
     # Switching the string datatype of the column gender into integer
