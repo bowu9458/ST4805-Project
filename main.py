@@ -28,7 +28,10 @@ for index in range(0, len(df["bmi"])):
         df["bmi"][index] = format(df["bmi"][index], '.1f')
 
 # Switching the float datatype of the column age into integer
+age_mean = np.mean(df["age"])
 for index in range(0, len(df["age"])):
+    if df["age"][index] == 0:
+        df["age"][index] = age_mean
     df["age"] = df["age"].astype(int)
 
 # Switching the string datatype of the column gender into integer
@@ -100,6 +103,7 @@ model = LogisticRegression(
     penalty="l2", random_state=None, solver="liblinear", max_iter=1000,
     multi_class='ovr', verbose=0,
 )
+
 # TODO 4. --------tune hyperparameters---------
 parameters = {"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000]}
 grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=[5, 10, 20])
