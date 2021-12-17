@@ -14,7 +14,7 @@ def data_cleaning():
     # Determining that if missing patterns exist
     df.apply(lambda x: sum(x.isnull()), axis=0)
 
-    # Dealing with the N/A value in the bmi column
+    # Dealing with the N/A value in the bmi column with a decision tree model to predict the value
     list1 = []
     list2 = []
     list3 = []
@@ -24,61 +24,55 @@ def data_cleaning():
     list7 = []
     list8 = []
     for index in range(0, len(df["bmi"])):
-        if str(df["bmi"].iloc[index]) != "nan":
-            if df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 0:
-                list1.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 0:
-                list2.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] <= 163 and \
-                    df["heart_disease"].iloc[index] == 1:
-                list3.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 0:
-                list4.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 0:
-                list5.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 1:
-                list6.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 1:
-                list7.append(df["bmi"].iloc[index])
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 1:
-                list8.append(df["bmi"].iloc[index])
+        if str(df["bmi"].iloc[index])[0] != "n":
+            if df["age"].iloc[index] <= 40:
+                if df["avg_glucose_level"].iloc[index] <= 163:
+                    if df["heart_disease"].iloc[index] == 0:
+                        list1.append(df["bmi"].iloc[index])
+                    else:
+                        list2.append(df["bmi"].iloc[index])
+                else:
+                    if df["heart_disease"].iloc[index] == 0:
+                        list3.append(df["bmi"].iloc[index])
+                    else:
+                        list4.append(df["bmi"].iloc[index])
+            else:
+                if df["avg_glucose_level"].iloc[index] <= 163:
+                    if df["heart_disease"].iloc[index] == 0:
+                        list5.append(df["bmi"].iloc[index])
+                    else:
+                        list6.append(df["bmi"].iloc[index])
+                else:
+                    if df["heart_disease"].iloc[index] == 0:
+                        list7.append(df["bmi"].iloc[index])
+                    else:
+                        list8.append(df["bmi"].iloc[index])
 
     for index in range(0, len(df["bmi"])):
-        if str(df["bmi"].iloc[index]) == "nan":
-            if df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 0:
-                df["bmi"].iloc[index] = np.mean(list1)
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 0:
-                df["bmi"].iloc[index] = np.mean(list2)
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] <= 163 and \
-                    df["heart_disease"].iloc[index] == 1:
-                df["bmi"].iloc[index] = np.mean(list3)
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 0:
-                df["bmi"].iloc[index] = np.mean(list4)
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 0:
-                df["bmi"].iloc[index] = np.mean(list5)
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] <= 163 and df["heart_disease"].iloc[
-                index] == 1:
-                df["bmi"].iloc[index] = np.mean(list6)
-            elif df["age"].iloc[index] <= 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 1:
-                df["bmi"].iloc[index] = np.mean(list7)
-            elif df["age"].iloc[index] > 40 and df["avg_glucose_level"].iloc[index] > 163 and df["heart_disease"].iloc[
-                index] == 1:
-                df["bmi"].iloc[index] = np.mean(list8)
-
-    for index in range(0, len(df["bmi"])):
-        df["bmi"].iloc[index] = format(df["bmi"].iloc[index], '.1f')
+        if str(df["bmi"].iloc[index])[0] == "n":
+            if df["age"].iloc[index] <= 40:
+                if df["avg_glucose_level"].iloc[index] <= 163:
+                    if df["heart_disease"].iloc[index] == 0:
+                        df["bmi"].iloc[index] = np.mean(list1)
+                    else:
+                        df["bmi"].iloc[index] = np.mean(list2)
+                else:
+                    if df["heart_disease"].iloc[index] == 0:
+                        df["bmi"].iloc[index] = np.mean(list3)
+                    else:
+                        df["bmi"].iloc[index] = np.mean(list4)
+            else:
+                if df["avg_glucose_level"].iloc[index] <= 163:
+                    if df["heart_disease"].iloc[index] == 0:
+                        df["bmi"].iloc[index] = np.mean(list5)
+                    else:
+                        df["bmi"].iloc[index] = np.mean(list6)
+                else:
+                    if df["heart_disease"].iloc[index] == 0:
+                        df["bmi"].iloc[index] = np.mean(list7)
+                    else:
+                        df["bmi"].iloc[index] = np.mean(list8)
+        df["bmi"].iloc[index] = round(df["bmi"].iloc[index], 1)
 
     # Switching the float datatype of the column age into integer
     age_mean = np.mean(df["age"])
