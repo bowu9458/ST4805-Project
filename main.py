@@ -72,6 +72,7 @@ def data_cleaning():
                         df["bmi"].iloc[index] = np.mean(list7)
                     else:
                         df["bmi"].iloc[index] = np.mean(list8)
+
         df["bmi"].iloc[index] = round(df["bmi"].iloc[index], 1)
 
     # Switching the float datatype of the column age into integer
