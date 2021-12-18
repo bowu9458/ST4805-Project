@@ -138,6 +138,7 @@ def feature_selection():
     feature_score = pd.Series(feature_model.feature_importances_, index=X.columns)
     feature_score.nlargest(15).plot(kind='bar')
     plt.show()
+
     df = df.drop(["Residence_type"], axis=1)
     df = df.drop(["work_type"], axis=1)
     print(df)
@@ -159,18 +160,20 @@ def run_model(df_data, df_label):
                    },
                   {"penalty": ["none"],
                    "solver": ["lbfgs"]
+                   },
+                  {"C": [0.001, 0.01, 0.1, 1, 10, 100, 1000],
+                   "penalty": ["l2"],
+                   "solver": ["lbfgs"]
                    }
                   ]
     grid_search = GridSearchCV(model, parameters, n_jobs=-1, scoring='accuracy', cv=10)
     grid_search.fit(X_train, Y_train)
     print(grid_search.best_params_, grid_search.best_score_)
-    t = grid_search.best_params_
-    acc = grid_search.score(X_test, Y_test)
 
 
 # TODO 5. --detect and then prevent overfitting-
 def draw_learning_curve(df_data, df_label):
-    """_best_params : {'C': 10, 'penalty': 'l1' or 'l2', 'solver': 'liblinear'}"""
+    """_best_params : {'C': 1, 'penalty': 'l2', 'solver': 'lbfgs'}"""
     logistic_regre = LogisticRegression(
         penalty='l1',
         C=10,
@@ -194,6 +197,7 @@ def draw_learning_curve(df_data, df_label):
     plt.xlabel('training examples')
     plt.ylabel('score')
     plt.show()
+
     # error rate
     train_error = 1 - train_score
     test_error = 1 - test_score
